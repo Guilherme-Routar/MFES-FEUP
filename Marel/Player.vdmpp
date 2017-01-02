@@ -1,14 +1,21 @@
 class Player
-types
--- TODO Define types here
-values
--- TODO Define values here
 instance variables
--- TODO Define instance variables here
+	private id: char; 
+	private pieces: set of Piece; 
+	inv id in set {'B','R'};
+
 operations
--- TODO Define operations here
-functions
--- TODO Define functiones here
-traces
--- TODO Define Combinatorial Test Traces here
+	--Construtor 
+	public Player : char ==> Player Player(t)== ( 
+			id := t; 
+			--TODO iniciar pieces
+			return self; 
+	)pre t in set {'B','R'};
+		
+	--Gets Sets
+	public getId: () ==> char getId () == ( return id; ); 
+	public setId: char ==> () setId (newId) == ( id := newId; ) pre newId in set {'B','R'}; 
+	public getPieces: () ==> set of Piece getPieces() == ( return pieces; ); 
+	public setPieces: set of Piece ==> () setPieces (newSet) == ( pieces := newSet; )pre card newSet > 1;
+	
 end Player

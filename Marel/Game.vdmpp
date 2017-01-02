@@ -1,14 +1,18 @@
 class Game
-types
--- TODO Define types here
-values
--- TODO Define values here
 instance variables
--- TODO Define instance variables here
+	public board: Board;
+	public currentPlayer: Player;
+	public player1: Player; 
+	public player2: Player;
+	public piecesB: set of Piece:= {};
+	public piecesR: set of Piece:= {};
+
 operations
--- TODO Define operations here
-functions
--- TODO Define functiones here
-traces
--- TODO Define Combinatorial Test Traces here
+	--Construtor; 
+	public Game:() ==> Game Game() == ( 
+			board := new Board(); 
+			player1 := new Player('B'); 
+			player2 := new Player('R'); 
+			return self; 
+	);
 end Game
