@@ -1,0 +1,46 @@
+class Grafo
+instance variables
+	public Vertices : seq of Cell := []; --celulas
+	public Arestas : seq of set of nat1 := [{}]; --ligacoes entre celulas
+	--inv1 Uma aresta s pode ligar vrtices do grafo a que pertence.
+	--inv ((dom Arestas) union (dunion(rng Arestas))) subset Vertices;
+	-- cria o conjunto com as celulas adjacentes para cada celula,
+	-- constroi grafo de adjacencias (dependentes da dimensao do tabuleiro)
+operations
+
+	public Grafo : () ==> Grafo Grafo () == (
+
+		-- cria as celulas de acordo com a dimensao do tabuleiro
+		(for i = 1 to 16 by 1 do
+			Vertices := (self.Vertices ^ ([new Cell(i)]));
+		);
+		
+		-- constroi as ligacoes entre celulas (arestas) de acordo com
+		-- as adjacencias existentes no tipo de jogo seleccionado
+		-- cria sequencia com os conjutos de arestas possiveis
+		--SIX MEN’S MORRIS -> 16 CELLS
+		Arestas := [{2, 7}, --1
+								{1, 3, 5},--2
+								{2, 10}, --3
+								{5, 8},
+								{2, 4, 6},
+								{5, 9},
+								{1, 8, 14},
+								{4, 7, 11},
+								{6, 10, 13},
+								{3, 9, 16},
+								{8, 12},
+								{11, 13, 15},
+								{9, 12},
+								{7, 15},
+								{12, 14, 16},
+								{10, 15} ];
+		
+		-- adiciona o conjunto de celulas adjacentes a cada celula iterada
+		(for i = 1 to 16 by 1 do
+			Vertices(i).neighbours := Arestas(i);
+		);
+	);
+
+
+end Grafo

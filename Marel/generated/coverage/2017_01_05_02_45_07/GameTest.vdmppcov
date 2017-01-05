@@ -1,0 +1,153 @@
+class GameTest is subclass of TestAssert
+
+operations
+	public runTests : () ==> () runTests() == (
+		testVariables();
+		
+		testColocaPeca();
+		testRemovePeca();
+		testMovePeca();
+		--testAtualizaFase();
+		--testMill();
+	);
+
+protected testVariables : () ==> () testVariables() == (
+		dcl game : Game := new Game();
+
+		assertTrue(isofclass(Game, game));
+
+		assertTrue(game.player1.id = 'B');
+		assertTrue(game.player2.id = 'R');
+		assertTrue(game.player1 <> game.player2);
+
+		assertTrue(game.gameState = 1);
+		assertFalse(game.board = nil);
+	);
+
+--teste para colocar uma peca numa posicao
+protected testColocaPeca : () ==> () testColocaPeca() == (
+		dcl game : Game := new Game();
+		--colocar uma peca com id 1 no na celula com id 1
+		dcl idCelulaDestino : nat1 := 1;
+		dcl idPeca : nat1 := 1;
+		
+		-- a peca do jogador tem de estar no bolso (estado = 0)
+		assertTrue(game.player1.pieces(idPeca).pieceState = 0);
+		--a cor da peca tem de ser do jogador respectivo
+		assertTrue(game.player1.pieces(idPeca).color = game.player1.id);
+		--a celula selecionada nao pode estar ocupada
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).hasPiece = false);
+		--jogo tem de estar na fase 1
+		assertTrue(game.gameState = 1);
+		-- < COLOCAR PECA >
+		game.putPiece(game.player1, idCelulaDestino, idPeca);
+		-- < COLOCAR PECA >
+		--id da peca esta correto
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).piece.id = idPeca);
+		--cor da peca e a cor do jogador que a colocou la
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).piece.color = game.player1.id);
+		--celula passa a estar ocupada
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).hasPiece = true);
+	);
+
+-- testar a re mo o de uma peca do tabuleiro( passa de estado 1 a estado -1)
+protected testRemovePeca : () ==> () testRemovePeca() == (
+		dcl game : Game := new Game();
+		dcl idCelulaDestino : nat1 := 1;
+		dcl idPeca : nat1 := 1;
+		
+		--colocar peca a remover
+		game.putPiece(game.player1, idCelulaDestino, idPeca);
+		--peca colocada tem de passar ao estado 1 (no tabuleiro)
+		assertTrue(game.player1.pieces(idPeca).pieceState = 1);
+		--celula origem tem de estar ocupada
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).hasPiece = true);
+		--peca na celula origem tem de estar no tabuleiro (estado = 1)
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).piece.pieceState = 1);
+		-- o jogador so pode mover as suas proprias pecas
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).piece in set elems game.player1.pieces);
+		--id da peca celula destino tem de coincidir com a anteriormente posta
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).piece.id = game.player1.pieces(idPeca).id);
+		--celula esta ocupada
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).hasPiece = true);
+		--id da peca celula destino tem de coincidir com a anteriormente posta
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).piece.id = game.player1.pieces(idPeca).id);
+		-- < REMOVE PECA >
+		game.removePeca(idCelulaDestino);
+		-- < REMOVE PECA >
+		--peca removida esta eliminada (estado = -1)
+		assertTrue(game.player1.pieces(idPeca).pieceState = -1);
+		--celula esta desocupada
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).hasPiece = false);
+		--celula nao tem peca
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).piece = nil);
+	);
+
+--teste para mover uma peca
+protected testMovePeca : () ==> () testMovePeca() == (
+		dcl game : Game := new Game();
+		dcl peca : Piece := game.player1.pieces(1);
+		-- mover da celula 2 para a celula 1
+		dcl idCelulaOrigem : nat1 := 1;
+		dcl idCelulaDestino : nat1 := 2;
+		
+		game.player1.pieces(1).pieceState := 0;
+		game.player1.pieces(2).pieceState := 1;
+		game.player1.pieces(3).pieceState := 1;
+		--colocar peca a mover
+		game.putPiece(game.player1, idCelulaOrigem, peca.id);
+		game.gameState := 2;
+		--celula origem esta ocupada
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaOrigem).hasPiece = true);
+		--celular destino tem de estar livre
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).hasPiece = false);
+		--celular origem tem de ter uma peca
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaOrigem).piece <> nil);
+		--peca na celula de origem tem de estar no estado 1
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaOrigem).piece.pieceState = 1);
+		-- o jogador move uma das suas pieces
+		assertTrue(game.board.grafo_adj.Vertices(idCelulaOrigem).piece.id in set inds (game.player1.pieces));
+		-- < MOVE PECA > | 1 | <------- | 0 |
+		game.movePeca(game.player1, idCelulaDestino, idCelulaOrigem);
+		-- < MOVE PECA >
+		--celula origem ficou livre e nao tem nenhuma peca
+		--assertTrue(game.board.grafo_adj.Vertices(idCelulaOrigem).hasPiece = false
+		--and game.board.grafo_adj.Vertices(idCelulaOrigem).piece = nil);
+		--celula destino ficou ocupada
+		--assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).hasPiece = true);
+		--o jogador nao tem pieces no bolso
+		--assertTrue(card {p | p in set elems game.player1.pieces & p.pieceState = 0} = 0);
+		--peca do jogador ainda tem de estar no board
+		--assertTrue(game.board.grafo_adj.Vertices(idCelulaDestino).piece.pieceState = 1);
+	);
+
+	protected testAtualizaFase: () ==> ()testAtualizaFase() == (
+		dcl game : Game := new Game();
+		game.player1.pieces(1).pieceState := 1;
+		game.player1.pieces(2).pieceState := 1;
+		game.player1.pieces(3).pieceState := 1;
+		game.updateGameState();
+		assertTrue(game.gameState = 1);
+		game.player2.pieces(1).pieceState := 1;
+		game.player2.pieces(2).pieceState := 1;
+		game.player2.pieces(3).pieceState := 1;
+		game.updateGameState();
+		assertTrue(game.gameState = 2);
+	);
+
+	protected testMill: () ==> () testMill() == (
+		dcl game : Game := new Game();
+		dcl idCelulaDestino : nat1 := 1;
+		dcl idPeca : nat1 := 1;
+		dcl idPeca1 : nat1 := 2;
+		dcl idPeca2 : nat1 := 3;
+
+		game.putPiece(game.player1, 1, idPeca);
+		assertFalse(game.verificaMill(idCelulaDestino));
+		game.putPiece(game.player1, 2, idPeca1);
+		game.putPiece(game.player1, 3, idPeca2);
+		assertTrue(game.verificaMill(idCelulaDestino));
+	);
+
+
+end GameTest

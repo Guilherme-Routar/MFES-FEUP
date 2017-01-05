@@ -1,0 +1,36 @@
+class BoardTest is subclass of TestAssert
+
+operations
+	public runTests : () ==> () runTests() == (
+		testVariables();
+		testOperations();
+	);
+	
+	protected testVariables : () ==> () testVariables() == (
+		dcl b : Board := new Board();
+		assertTrue(isofclass(Board, b));
+	);
+	
+	
+	protected testOperations : () ==> () testOperations() == (
+		dcl board : Board := new Board();
+		dcl idCell : nat1 := 1;
+		dcl piece : Piece := new Piece('B', 1);
+		
+		board.putPiece(idCell, piece);
+		assertTrue(board.grafo_adj.Vertices(idCell).id = idCell);
+		assertTrue(board.grafo_adj.Vertices(idCell).hasPiece = true);
+		assertTrue(board.grafo_adj.Vertices(idCell).piece.id = piece.id);
+		assertTrue(board.grafo_adj.Vertices(idCell).piece.color = piece.color);
+		assertTrue(board.grafo_adj.Vertices(idCell).piece.pieceState = 1); -- Check if is on board
+
+		--board.remPiece(idCell);
+		--assertTrue(board.grafo_adj.Vertices(idCell).hasPiece = false);
+		--assertTrue(board.grafo_adj.Vertices(idCell).piece = nil);
+		
+		--board.putPiece(idCell, piece);
+		--assertTrue(board.isMovimentoValido(idCell, 10) = true);
+		--assertFalse(board.isMovimentoValido(idCell, 1));
+	);
+	
+end BoardTest

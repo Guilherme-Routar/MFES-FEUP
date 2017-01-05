@@ -1,0 +1,29 @@
+class PieceTest is subclass of TestAssert
+
+operations
+
+	public runTests : () ==> () runTests() == (
+		testVariables();
+		testOperations();
+	);
+	
+	protected testVariables : () ==> () testVariables() == (
+		dcl p : Piece := new Piece('B', 1);
+		assertTrue(isofclass(Piece, p));
+		assertTrue(p.id = 1);
+		assertTrue(p.color = 'B');
+		assertTrue(p.pieceState = 0);
+	);
+	
+	protected testOperations : () ==> () testOperations() == (
+		dcl p : Piece := new Piece('B', 1);
+
+		p.setColor('R');
+		assertTrue(p.getColor() = 'R');
+
+		p.setId(2);
+		assertTrue(p.getId() = 2);
+	);
+
+
+end PieceTest

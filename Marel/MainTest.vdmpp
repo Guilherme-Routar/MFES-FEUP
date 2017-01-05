@@ -1,0 +1,20 @@
+class MainTest
+operations
+	public main : () ==> () main() == (
+
+		dcl cellTest : CellTest := new CellTest();
+		dcl pieceTest : PieceTest := new PieceTest();
+		dcl playerTest : PlayerTest := new PlayerTest();
+		dcl graphTest : GraphTest := new GraphTest();
+		dcl boardTest : BoardTest := new BoardTest();
+		dcl gameTest : GameTest := new GameTest();
+		
+		cellTest.runTests();
+		pieceTest.runTests();
+		playerTest.runTests();
+		graphTest.runTests();
+		boardTest.runTests();
+		gameTest.runTests();
+	);
+	
+end MainTest

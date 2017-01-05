@@ -1,0 +1,36 @@
+class CellTest is subclass of TestAssert
+operations
+	
+	public runTests : () ==> () runTests() == (
+		testVariables();
+		testOperations();
+	);
+	
+	protected testVariables : () ==> () testVariables() == (
+		dcl c : Cell := new Cell(1);
+		assertTrue(isofclass(Cell, c));
+		assertTrue(c.id = 1);
+		assertTrue(c.hasPiece = false);
+		assertTrue(c.piece = nil);
+		assertTrue(card (c.neighbours) = 0);
+		assertTrue(c.cellMills = []);
+	);
+	
+	protected testOperations : () ==> () testOperations() == (
+		dcl c : Cell := new Cell(1);
+		dcl p : Piece := new Piece('B', 1);
+
+		c.setHasPiece(true);
+		assertTrue(c.hasPiece = true);
+	
+		c.setPiece(p);
+		assertTrue(isofclass(Piece, c.piece));
+		assertTrue(c.piece = p);
+		
+		c.setMills([1,2,3]);
+		assertTrue(c.cellMills = [1,2,3]);
+		
+		assertTrue(c.getId() = 1);
+	);
+
+end CellTest
