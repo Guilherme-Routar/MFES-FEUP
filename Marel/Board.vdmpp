@@ -41,7 +41,7 @@ operations
 	)
 		--pre pecaX in set (jogador1.pecas union jogador2.pecas); TODO meter no jogo
 		pre grafo_adj.Vertices(idCell).hasPiece = false and idCell in set inds (grafo_adj.Vertices)
-		post grafo_adj.Vertices(idCell).hasPiece = true;
+		post grafo_adj.Vertices(idCell).hasPiece = true and grafo_adj.Vertices(idCell).piece.pieceState = 1;
 	
 	
 end Board

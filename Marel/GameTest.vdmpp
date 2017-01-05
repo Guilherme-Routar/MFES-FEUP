@@ -7,8 +7,8 @@ operations
 		testColocaPeca();
 		testRemovePeca();
 		testMovePeca();
-		--testAtualizaFase();
-		--testMill();
+		testAtualizaFase();
+		testMill();
 	);
 
 protected testVariables : () ==> () testVariables() == (
@@ -94,8 +94,12 @@ protected testMovePeca : () ==> () testMovePeca() == (
 		game.player1.pieces(1).pieceState := 0;
 		game.player1.pieces(2).pieceState := 1;
 		game.player1.pieces(3).pieceState := 1;
+		game.player1.pieces(4).pieceState := 1;
+		game.player1.pieces(5).pieceState := 1;
+		game.player1.pieces(6).pieceState := 1;
 		--colocar peca a mover
 		game.putPiece(game.player1, idCelulaOrigem, peca.id);
+		game.player1.pieces(1).pieceState := 1;
 		game.gameState := 2;
 		--celula origem esta ocupada
 		assertTrue(game.board.grafo_adj.Vertices(idCelulaOrigem).hasPiece = true);
@@ -126,11 +130,17 @@ protected testMovePeca : () ==> () testMovePeca() == (
 		game.player1.pieces(1).pieceState := 1;
 		game.player1.pieces(2).pieceState := 1;
 		game.player1.pieces(3).pieceState := 1;
+		game.player1.pieces(4).pieceState := 1;
+		game.player1.pieces(5).pieceState := 1;
+		game.player1.pieces(6).pieceState := 1;
 		game.updateGameState();
 		assertTrue(game.gameState = 1);
 		game.player2.pieces(1).pieceState := 1;
 		game.player2.pieces(2).pieceState := 1;
 		game.player2.pieces(3).pieceState := 1;
+		game.player2.pieces(4).pieceState := 1;
+		game.player2.pieces(5).pieceState := 1;
+		game.player2.pieces(6).pieceState := 1;
 		game.updateGameState();
 		assertTrue(game.gameState = 2);
 	);
